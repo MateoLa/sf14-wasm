@@ -1,7 +1,7 @@
 const process = require("process");
 const fs = require("fs");
 const readline = require("readline");
-const Stockfish = require("./stockfish.js");
+const Stockfish = require("./sf14-nnue.js");
 
 const UCI_NNUE_FILE = process.env.UCI_NNUE_FILE;
 

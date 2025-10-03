@@ -1,4 +1,4 @@
-EXE = stockfish.js
+EXE = sf14-nnue.js
 COMP = em++
 CXX = em++
 comp = clang
@@ -15,13 +15,13 @@ VPATH := $(VPATH):emscripten
 EM_CXXFLAGS +=
 EM_LDFLAGS += \
 	--pre-js emscripten/preamble.js \
+	-pthread \
 	-s MODULARIZE=1 -s EXPORT_NAME="Stockfish" -s ENVIRONMENT=web,worker,node \
 	-s STRICT=1 \
 	-s ASYNCIFY=1 -s 'ASYNCIFY_IMPORTS=["emscripten_utils_getline_impl"]' \
-	-s USE_PTHREADS=1 \
 	-s PROXY_TO_PTHREAD=1 \
 	-s ALLOW_MEMORY_GROWTH=1 -s INITIAL_MEMORY=$$((1 << 27)) -s MAXIMUM_MEMORY=$$((1 << 31)) \
-	-s FILESYSTEM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS=["FS"] \
+	-s FILESYSTEM=1 -s EXPORTED_RUNTIME_METHODS=["FS"] \
 	-s ALLOW_UNIMPLEMENTED_SYSCALLS
 
 ifeq ($(minify_js),yes)
@@ -47,22 +47,17 @@ else
 	EM_CXXFLAGS += -DNNUE_EMBEDDING_OFF
 endif
 
-EM_COMMIT = $(shell git rev-parse --short HEAD)
-EM_UPSTREAM = $(shell git rev-parse --short $$(git merge-base HEAD upstream/master))
 EM_EMSCRIPTEN = $(shell emsdk list | grep INSTALLED | head -n 1 | awk '{ print $$1 }')
 
 EXTRACXXFLAGS += \
 	-DUSE_POPCNT $(EM_CXXFLAGS) \
-	-DEM_COMMIT=$(EM_COMMIT) \
-	-DEM_UPSTREAM=$(EM_UPSTREAM) \
 	-DEM_EMSCRIPTEN=$(EM_EMSCRIPTEN)
 EXTRALDFLAGS += $(EM_LDFLAGS)
 
 EM_ARTIFACTS += \
-	stockfish.js stockfish.wasm stockfish.worker.js \
+	sf14-nnue.js sf14-nnue.wasm sf14-nnue.worker.js \
 	emscripten/embedded_nnue.cpp \
-	emscripten/public/stockfish.js emscripten/public/stockfish.wasm emscripten/public/stockfish.worker.js \
-	emscripten/public/AUTHORS emscripten/public/Copying.txt
+	emscripten/public/sf14-nnue.js emscripten/public/sf14-nnue.wasm emscripten/public/sf14-nnue.worker.js
 
 ifeq ($(embedded_nnue),yes)
 emscripten/embedded_nnue.cpp: net
@@ -70,8 +65,8 @@ emscripten/embedded_nnue.cpp: net
 endif
 
 emscripten_copy_files:
-	cp -f ../AUTHORS ../Copying.txt stockfish.js stockfish.wasm emscripten/public
-	cat stockfish.worker.js emscripten/worker-postamble.js > emscripten/public/stockfish.worker.js
+	cp -f sf14-nnue.js sf14-nnue.wasm emscripten/public
+	cat sf14-nnue.js emscripten/worker-postamble.js > emscripten/public/sf14-nnue.worker.js
 
 emscripten_build: build emscripten_copy_files
 

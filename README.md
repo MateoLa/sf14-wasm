@@ -8,7 +8,7 @@
 <p>Analyzes chess positions and computes optimal moves.</p>
 </div>
 
-#### Description of the universal chess interface - UCI protocol
+#### Universal Chess Interface - UCI protocol
 
 It is a command line protocol.
 
@@ -27,6 +27,8 @@ WebAssembly is designed to complement and run alongside JavaScript, sharing func
 
 ### Prerequisites
 
+* Install Node
+
 * Install Emscripten
 
 * Set working directory to stockfish/src/
@@ -44,6 +46,14 @@ assertion = no
 ```
 
 If you use the "minify_js" option, the version is compiled with warnings.
+
+### Run
+
+```js
+cd src/emscripten
+npm install
+node public/uci.js
+```
 
 #### Added and Modified Files:
 

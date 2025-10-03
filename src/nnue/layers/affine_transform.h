@@ -269,6 +269,7 @@ namespace Stockfish::Eval::NNUE::Layers {
         transformedFeatures, buffer + SelfBufferSize);
       OutputType* output = reinterpret_cast<OutputType*>(buffer);
 
+/*
 #if defined(USE_WASM_SIMD)
       {
         // Simplify variable names (y = Ax + b)
@@ -283,6 +284,7 @@ namespace Stockfish::Eval::NNUE::Layers {
         return y;
       }
 #endif
+*/
 
 #if defined (USE_AVX512)
       using vec_t = __m512i;
